@@ -357,15 +357,18 @@ window.addEventListener('DOMContentLoaded', function () {
         });
 
 
-
-        forms.forEach((item) => {
+              forms.forEach((item) => {
             item.addEventListener('submit', function (event) {
                 event.preventDefault();
                 this.appendChild(statusMessage);
                 statusMessage.textContent = loadMessage;
                 const formData = new FormData(this);
+                let body = {};
+                formData.forEach((value, key) => {
+                    body[key] = value;
+                });
               
-                postData(formData)
+                postData(body)
                     .then((response) => {
                         statusMessage.textContent = successMessage;
                         if (response.status !== 200) {
@@ -398,7 +401,7 @@ window.addEventListener('DOMContentLoaded', function () {
             return fetch('./server.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'multipart/form-data' },
-                body: body
+                body: JSON.stringify(body)
             
             });
            
